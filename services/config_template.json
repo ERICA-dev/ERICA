@@ -1,0 +1,6 @@
+{
+  "elastic": {
+    "ip": "localhost",
+    "port": "61616"
+  }
+}
