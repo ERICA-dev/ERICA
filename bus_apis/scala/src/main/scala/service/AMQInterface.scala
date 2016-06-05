@@ -10,12 +10,14 @@ class AMQService {
   
   def subscribe(topic: String, onMsg: () => Unit) {
     val msgResponder = new MsgResponder(onMsg)
-    val transformActor = system.actorOf(Props.create(classOf[AMQActor], topic, msgResponder))
-    transformActor ! "connect"
+    val subscribeActor = system.actorOf(Props.create(classOf[SubscribeActor], topic, msgResponder))
+    subscribeActor ! "connect"
   }
 
   def publish(topic: String, data: String) {
     val publishActor = system.actorOf(Props.create(classOf[PublishActor]))
+    publishActor ! "connect"
+    Thread.sleep(1000) // very ugly delay since variable theBus is none beforeconnect is done
     publishActor ! ("publish", topic, data)
   }
 
@@ -30,7 +32,7 @@ class MsgResponder(onMsgParam: () => Unit) {
   def onMsg = onMsgParam
 }
 
-class AMQActor(consumedTopic: String, msgResponder: MsgResponder) extends Actor {
+class SubscribeActor(consumedTopic: String, msgResponder: MsgResponder) extends Actor {
   // implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all // for json serialization
 
   var theBus: Option[ActorRef] = None
@@ -65,11 +67,7 @@ class PublishActor() extends Actor {
       ReActiveMQExtension(context.system).manager ! GetAuthenticatedConnection(s"nio://localhost:61616", "admin", "admin")
     }
     case ConnectionEstablished(request, c) => {
-      // println("connected:" + request)
-      // c ! ConsumeFromTopic(consumedTopic)
-      // println("cons:" + c)
-      // theBus = Some(c)
-      // println("bus:" + theBus)
+      theBus = Some(c)
     }
     case ConnectionFailed(request, reason) => {
       println("failed:" + reason)

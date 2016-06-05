@@ -5,4 +5,6 @@ object Main extends App {
   def myFunc() { println("hej") }
   amqService.subscribe("hej", myFunc)
   // amqService.publish("neuesneuestopic", "mooooo")
+  Thread.sleep(1000)
+  amqService.publish("moujo", "buuue")
 }
