@@ -1,10 +1,11 @@
 package service
 
 object Main extends App {
-  var amqService = new AMQService
+  val amqSubscriber = new AMQSubscriber
+  val amqPublisher = new AMQPublisher
   def myFunc() { println("hej") }
-  amqService.subscribe("hej", myFunc)
-  // amqService.publish("neuesneuestopic", "mooooo")
-  Thread.sleep(1000)
-  amqService.publish("moujo", "buuue")
+  amqSubscriber.subscribe("hej", () => 
+    amqPublisher.publish("hej", "titta vad roligt"))
+  Thread.sleep(2000)
+  amqPublisher.publish("hej", "håll i hatten")
 }
