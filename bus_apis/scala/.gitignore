@@ -1,4 +1,4 @@
-*.class
+project/target/config-classes/$936485b388ab844bca75$$anonfun$$sbtdef$1.class
 .idea/
 src/main/resources/application.conf
 target
