@@ -1,4 +1,4 @@
-package service
+package erica.bus_apis
 
 import akka.actor.{Props, Actor, ActorRef, ActorSystem}
 import com.codemettle.reactivemq.ReActiveMQExtension

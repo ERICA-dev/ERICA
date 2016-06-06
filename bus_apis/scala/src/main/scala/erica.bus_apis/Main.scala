@@ -1,4 +1,4 @@
-package service
+package erica.bus_apis
 
 object Main extends App {
   val amqSubscriber = new AMQSubscriber

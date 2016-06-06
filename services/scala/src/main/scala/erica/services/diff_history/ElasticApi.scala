@@ -1,39 +1,37 @@
-package diff_history
+package erica.services
 
 import org.json4s._
 import org.json4s.native.JsonMethods._
-import org.json4s.native.Serialization._
 import wabisabi.Client
-
-import javax.swing.JList
-
-import org.json4s.native.JsonMethods._
-import org.json4s.native.Serialization._
-import org.json4s._
-import org.json4s.JsonDSL._
-import scala.concurrent.ExecutionContext.Implicits.global // Client.get gets sad without this
-import ElasticApi._
-
+/**
+  * Created by marp on 2016-06-06.
+  */
 object ElasticApi {
   implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all // json4s needs this for something
 
-  val config = parse(scala.io.Source.fromFile("../config.json").getLines.mkString)
-  val ip = (config \ "elastic" \ "ip").values
-  val port = (config \ "elastic" \ "port").values
+ // val config = parse(scala.io.Source.fromFile("../config.json").getLines.mkString)
+  //val ip = (config \ "elastic" \ "ip").values
+  //val port = (config \ "elastic" \ "port").values
 
-  println("elastic_api attempting to connect to elasticsearch on address: " + ip + ":" + port )
+ // println("elastic_api attempting to connect to elasticsearch on address: " + ip + ":" + port )
   val client = new Client("http://$ip:$port") // creates a wabisabi client for communication with elasticsearch
-
-  def addPatient(patient : JValue, targetIndex: String): Unit = {
-    val careContactId:String = (patient \"CareContactId").values.toString
+  /*
+  def saveDiff(diff: JValue) {
+    val targetIndex = getIndex()
     client.index(
       index = targetIndex,
-      `type` ="PATIENT_TYPE",
-      id = Some(careContactId),
-      data = write(patient),
+      `type` = diff \ "type",
+      id = "test_id",
+      data = write(diff),
       refresh = true
     )
+  }*/
+
+  def getIndex(): String = {
+    "test_index"
   }
+
+
 
   def getPatientFromElastic(index: String, careContactId: String): JValue ={
     val oldPatientQuery = client.get(index, "PATIENT_TYPE", careContactId).map(_.getResponseBody) //fetch patient from database
@@ -43,7 +41,6 @@ object ElasticApi {
     println("Retrieved patient: " +oldPatient \ "_source")
     return oldPatient \ "_source" // The good stuff is located in _source.
   }
-
 
   def search(index:String, query:String): JValue ={
     val search = client.search(index, query).map(_.getResponseBody)

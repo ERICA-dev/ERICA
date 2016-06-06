@@ -1,4 +1,4 @@
-package service
+package erica.bus_apis
 
 import akka.actor.{Props, Actor, ActorRef, ActorSystem}
 import com.codemettle.reactivemq.ReActiveMQExtension
@@ -11,7 +11,7 @@ case object Connect
 class AMQSubscriber {
 
   implicit val system = ActorSystem()
-  
+
   def subscribe(topic: String, onMsg: () => Unit) {
     val actor = system.actorOf(Props.create(classOf[SubscribeActor], topic, onMsg))
     actor ! Connect
