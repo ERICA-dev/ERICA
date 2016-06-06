@@ -1,3 +1,0 @@
-# StatisticsService
-# CANCELLED
-

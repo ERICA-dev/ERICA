@@ -1,4 +1,4 @@
-package erica.services
+package erica.services.diff_history
 
 import org.json4s._
 import org.json4s.native.JsonMethods._
