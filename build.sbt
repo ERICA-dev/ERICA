@@ -42,6 +42,7 @@ lazy val config = (project in file("config")).
   settings(libraryDependencies ++= dependencies)
 
 lazy val services = (project in file("services")).
+  dependsOn(config, bus_apis).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 

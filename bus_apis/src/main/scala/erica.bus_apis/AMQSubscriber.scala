@@ -4,7 +4,6 @@ import akka.actor.{Props, Actor, ActorRef, ActorSystem}
 import com.codemettle.reactivemq.ReActiveMQExtension
 import com.codemettle.reactivemq.ReActiveMQMessages._
 import com.codemettle.reactivemq.model.{Topic, AMQMessage}
-import com.github.nscala_time.time.Imports._
 
 case object Connect
 
@@ -12,7 +11,7 @@ class AMQSubscriber {
 
   implicit val system = ActorSystem()
 
-  def subscribe(topic: String, onMsg: () => Unit) {
+  def subscribe(topic: String, onMsg: (String) => Unit) {
     val actor = system.actorOf(Props.create(classOf[SubscribeActor], topic, onMsg))
     actor ! Connect
   }
@@ -24,7 +23,7 @@ class AMQSubscriber {
   // val logger = Logging(system, "StatisticsService")
 }
 
-private class SubscribeActor(consumedTopic: String, onMSG: () => Unit) extends Actor {
+private class SubscribeActor(consumedTopic: String, onMSG: (String) => Unit) extends Actor {
   // implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all // for json serialization
 
   var theBus: Option[ActorRef] = None
@@ -45,7 +44,7 @@ private class SubscribeActor(consumedTopic: String, onMSG: () => Unit) extends A
     }
     case mess @ AMQMessage(body, prop, headers) => {
       println(body)
-      onMSG()
+      onMSG(body.toString)
     }
   }
 }

@@ -2,36 +2,38 @@ package erica.services.diff_history
 
 import org.json4s._
 import org.json4s.native.JsonMethods._
+import org.json4s.native.Serialization.write
 import wabisabi.Client
-/**
-  * Created by marp on 2016-06-06.
-  */
+import scala.concurrent.ExecutionContext.Implicits.global // Client.get gets sad without this
+import erica.config.Config
+
 object ElasticApi {
   implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all // json4s needs this for something
 
- // val config = parse(scala.io.Source.fromFile("../config.json").getLines.mkString)
-  //val ip = (config \ "elastic" \ "ip").values
-  //val port = (config \ "elastic" \ "port").values
+  val ip = Config.get("elastic_ip")
+  val port = Config.get("elastic_port")
 
- // println("elastic_api attempting to connect to elasticsearch on address: " + ip + ":" + port )
+  println("ElasticApi attempting to connect to elasticsearch on address: " + ip + ":" + port )
   val client = new Client("http://$ip:$port") // creates a wabisabi client for communication with elasticsearch
-  /*
+
   def saveDiff(diff: JValue) {
     val targetIndex = getIndex()
+
     client.index(
       index = targetIndex,
-      `type` = diff \ "type",
-      id = "test_id",
+      `type` = "type",
+      id = Some("test_id"),
       data = write(diff),
       refresh = true
     )
-  }*/
+  }
 
+  /**
+    this should return the sequence numer of the event
+   */
   def getIndex(): String = {
     "test_index"
   }
-
-
 
   def getPatientFromElastic(index: String, careContactId: String): JValue ={
     val oldPatientQuery = client.get(index, "PATIENT_TYPE", careContactId).map(_.getResponseBody) //fetch patient from database

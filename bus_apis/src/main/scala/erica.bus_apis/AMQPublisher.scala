@@ -36,7 +36,7 @@ private class PublishActor() extends Actor {
     }
     // TODO göra så att denna väntar på connect? som det är nu så händer ingetalls om man är för snabb att publisha tror jag
     case ("publish", topic: String, msg: String) => {
-      println(msg)
+      println("AMQPublisher sent message: "+msg)
       theBus.foreach{bus => bus ! SendMessage(Topic(topic), AMQMessage(msg))}
     }
   }
