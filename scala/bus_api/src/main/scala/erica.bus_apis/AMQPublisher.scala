@@ -1,25 +1,27 @@
-package erica.bus_apis
+package erica.bus_api
 
 import akka.actor.{Props, Actor, ActorRef, ActorSystem}
 import com.codemettle.reactivemq.ReActiveMQExtension
 import com.codemettle.reactivemq.ReActiveMQMessages._
 import com.codemettle.reactivemq.model.{Topic, AMQMessage}
+import com.github.nscala_time.time.Imports._
 import erica.config.Config
 
-case object Connect
-
-class AMQSubscriber {
+class AMQPublisher {
 
   implicit val system = ActorSystem()
 
-  def subscribe(topic: String, onMsg: (String) => Unit) {
-    val actor = system.actorOf(Props.create(classOf[SubscribeActor], topic, onMsg))
-    actor ! Connect
+  val actor = system.actorOf(Props.create(classOf[PublishActor]))
+  actor ! Connect
+
+  def publish(topic: String, msg: String) {
+    actor ! ("publish", topic, msg)
   }
 }
 
-private class SubscribeActor(consumedTopic: String, onMSG: (String) => Unit) extends Actor {
+private class PublishActor() extends Actor {
   var theBus: Option[ActorRef] = None
+
   val ip = Config.get("bus_ip")
   val port = Config.get("bus_port")
   val login = Config.get("bus_login")
@@ -31,17 +33,16 @@ private class SubscribeActor(consumedTopic: String, onMSG: (String) => Unit) ext
     }
     case ConnectionEstablished(request, c) => {
       println("connected:" + request)
-      c ! ConsumeFromTopic(consumedTopic)
-      println("cons:" + c)
       theBus = Some(c)
       println("bus:" + theBus)
     }
     case ConnectionFailed(request, reason) => {
       println("failed:" + reason)
     }
-    case mess @ AMQMessage(body, prop, headers) => {
-      println(body)
-      onMSG(body.toString)
+    // TODO göra så att denna väntar på connect? som det är nu så händer ingetalls om man är för snabb att publisha tror jag
+    case ("publish", topic: String, msg: String) => {
+      println("AMQPublisher sent message: "+msg)
+      theBus.foreach{bus => bus ! SendMessage(Topic(topic), AMQMessage(msg))}
     }
   }
 }
