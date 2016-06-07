@@ -1,12 +1,9 @@
 {
-  "elastic": {
-    "ip": "localhost",
-    "port": "61616"
-  },
-  "bus": {
-    "ip": "localhost",
-    "port": "61616",
-    "login": "admin",
-    "pass": "admin"
-  }
+    "elastic_ip": "localhost",
+    "elastic_port": "61616",
+
+    "bus_ip": "localhost",
+    "bus_port": "61616",
+    "bus_login": "admin",
+    "bus_pass": "admin"
 }
