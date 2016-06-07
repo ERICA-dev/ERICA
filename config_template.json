@@ -4,6 +4,7 @@
 
     "bus_ip": "localhost",
     "bus_port": "61616",
+    "bus_port_stomp": "61613",
     "bus_login": "admin",
     "bus_pass": "admin"
 }

@@ -1,9 +1,15 @@
+from config import Config
 import stomp
 # from threading import Thread
 import time
 
 
 class AMQSubscriber:
+
+    ip = Config.get("bus_ip")
+    port = Config.get("bus_port_stomp")
+    user = Config.get("bus_login")
+    pw = Config.get("bus_pass")
 
     # TODO revise use of thread, it should be useful with multiple
     # subscriptions right?
@@ -16,12 +22,12 @@ class AMQSubscriber:
 
     def _unthreaded_subscribe(self, topic, on_msg):
         self.on_msg = on_msg
-        c = stomp.Connection([('127.0.0.1', 61613)])
+        c = stomp.Connection([(self.ip, int(self.port))])
         listener = self._Listener()
         listener.set_on_msg(on_msg)
         c.set_listener('', listener)
         c.start()
-        c.connect('admin', 'admin', wait=True)
+        c.connect(self.user, self.pw, wait=True)
         c.subscribe(destination="/topic/" + topic, id=1, ack='auto')
         while True:
             time.sleep(1)
