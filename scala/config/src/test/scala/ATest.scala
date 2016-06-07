@@ -2,9 +2,8 @@ import org.scalatest.FlatSpec
 import erica.config.Config
 
 class ASpec extends FlatSpec {
-  "A one" should "be a one, of course" in {
-    val ip = Config.get("bus")
-    println(ip)
+  "Configs bus_ip" should "be a string" in {
+    val ip = Config.get("bus_ip")
     assert(ip.isInstanceOf[String])
   }
 }
