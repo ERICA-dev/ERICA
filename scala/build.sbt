@@ -17,6 +17,8 @@ lazy val commonSettings = Seq(
   )
 )
 
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.6" % Test
+
 lazy val dependencies = Seq(
   "com.typesafe.akka" %% "akka-actor"                     % "2.4.7",
   "com.codemettle.reactivemq" %% "reactivemq"             % "0.5.0",
