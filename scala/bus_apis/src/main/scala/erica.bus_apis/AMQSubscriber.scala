@@ -16,8 +16,6 @@ class AMQSubscriber {
     val actor = system.actorOf(Props.create(classOf[SubscribeActor], topic, onMsg))
     actor ! Connect
   }
-
-
 }
 
 private class SubscribeActor(consumedTopic: String, onMSG: (String) => Unit) extends Actor {
