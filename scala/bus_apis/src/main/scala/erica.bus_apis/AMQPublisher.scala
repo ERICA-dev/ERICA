@@ -5,6 +5,7 @@ import com.codemettle.reactivemq.ReActiveMQExtension
 import com.codemettle.reactivemq.ReActiveMQMessages._
 import com.codemettle.reactivemq.model.{Topic, AMQMessage}
 import com.github.nscala_time.time.Imports._
+import erica.config.Config
 
 class AMQPublisher {
 
@@ -19,12 +20,16 @@ class AMQPublisher {
 }
 
 private class PublishActor() extends Actor {
-
   var theBus: Option[ActorRef] = None
+
+  val ip = Config.get("bus_ip")
+  val port = Config.get("bus_port")
+  val login = Config.get("bus_login")
+  val pass = Config.get("bus_pass")
 
   def receive = {
     case Connect => {
-      ReActiveMQExtension(context.system).manager ! GetAuthenticatedConnection(s"nio://localhost:61616", "admin", "admin")
+      ReActiveMQExtension(context.system).manager ! GetAuthenticatedConnection(s"nio://$ip:$port", login, pass)
     }
     case ConnectionEstablished(request, c) => {
       println("connected:" + request)
