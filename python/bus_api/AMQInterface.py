@@ -16,10 +16,10 @@ c.set_listener('', PrintingListener())
 c.start()
 c.connect('admin', 'admin', wait=True)
 
-c.subscribe(destination='/hej', id=1, ack='auto')
+c.subscribe(destination='/topic/nytestgrejso', id=1, ack='auto')
 
-c.send(body='hejjeee', destination='/hej')
+c.send(body='hejjeee', destination='/topic/nytestgrejso')
 
-c.send(body="hejjeee", destination='/hej')
+c.send(body="hejjeee", destination='/topic/nytestgrejso')
 
-time.sleep(2)
+time.sleep(40)
