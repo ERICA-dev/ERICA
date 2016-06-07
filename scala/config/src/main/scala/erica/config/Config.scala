@@ -4,13 +4,18 @@ import org.json4s._
 import org.json4s.native.JsonMethods._
 
 object Config extends App {
-  val config:Map[String, String] = parse(scala.io.Source.fromFile("../config.json").getLines.mkString).
-    values.asInstanceOf[Map[String, String]]
+  var config:Map[String, String] = null
+  var init_once = false
 
-  println("config loaded:")
-  config.foreach(c => println("  "+c._1 + " : "+ c._2))
+  def get(key: String): String = {
+    if (!init_once) {
+      config = parse(scala.io.Source.fromFile("../config.json").getLines.mkString).
+        values.asInstanceOf[Map[String, String]]
 
-  def get(key: String): Any = {
+      println("config loaded:")
+      config.foreach(c => println("  "+c._1 + " : "+ c._2))
+      init_once = true
+    }
     config.get(key).get
   }
 }

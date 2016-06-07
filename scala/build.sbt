@@ -33,11 +33,12 @@ lazy val dependencies = Seq(
 lazy val root = project.in( file(".") )
   .aggregate(bus_apis, config, services)
 
-lazy val bus_apis = (project in file("bus_apis")).
+lazy val config = (project in file("config")).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 
-lazy val config = (project in file("config")).
+lazy val bus_apis = (project in file("bus_apis")).
+  dependsOn(config).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 

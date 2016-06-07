@@ -4,6 +4,7 @@ import akka.actor.{Props, Actor, ActorRef, ActorSystem}
 import com.codemettle.reactivemq.ReActiveMQExtension
 import com.codemettle.reactivemq.ReActiveMQMessages._
 import com.codemettle.reactivemq.model.{Topic, AMQMessage}
+import erica.config.Config
 
 case object Connect
 
@@ -16,21 +17,19 @@ class AMQSubscriber {
     actor ! Connect
   }
 
-  // något värt att ha alls av dessa kommenterade?
-  // activeMQ-things
-  // implicit val executor = system.dispatcher
-  // implicit val materializer = ActorMaterializer()
-  // val logger = Logging(system, "StatisticsService")
+
 }
 
 private class SubscribeActor(consumedTopic: String, onMSG: (String) => Unit) extends Actor {
-  // implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all // for json serialization
-
   var theBus: Option[ActorRef] = None
+  val ip = Config.get("bus_ip")
+  val port = Config.get("bus_port")
+  val login = Config.get("bus_login")
+  val pass = Config.get("bus_pass")
 
   def receive = {
     case Connect => {
-      ReActiveMQExtension(context.system).manager ! GetAuthenticatedConnection(s"nio://localhost:61616", "admin", "admin")
+      ReActiveMQExtension(context.system).manager ! GetAuthenticatedConnection(s"nio://$ip:$port", login, pass)
     }
     case ConnectionEstablished(request, c) => {
       println("connected:" + request)
