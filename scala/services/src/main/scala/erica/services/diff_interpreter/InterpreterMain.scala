@@ -44,14 +44,36 @@ class Interpreter {
 
   def newReceived(mess:JValue): Unit = {
     println(mess.extract[NewPatient])
+    val patient = mess.extract[NewPatient].patient
+
+    // create "registered" event
+    val registered = EricaEvent(Title = "registered",
+                                Timestamp = getEpoch(patient.CareContactRegistrationTime),
+                                SubjectId = patient.PatientId,
+                                Data = Map("asd" -> JInt(2))
+                              )
+
+    // create one event for each elvis field
+
+    // create one event for each elvisEvent
   }
 
   def diffReceived(mess:JValue): Unit = {
     println(mess.extract[PatientDiff])
+    // create one event for each update
+
+    // create one event_reverted for each removedEvent
+
+    // create one event for each elvisEvent
   }
 
   def removedReceived(mess:JValue): Unit = {
     println(mess.extract[RemovedPatient])
+    // only create the "removed" event
+  }
+
+  def elvisEventTranslator(events:List[ElvisEvent]): List[EricaEvent] ={
+    null
   }
 
   /**

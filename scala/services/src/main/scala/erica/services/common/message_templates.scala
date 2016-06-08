@@ -11,8 +11,7 @@ import org.json4s._
 case class EricaEvent(Title: String,
                       Timestamp: Long,
                       SubjectId: Long,
-                      EventId: Long,
-                      Data: JValue
+                      Data: Map[String, JValue]
                      )
 
 case class ElvisPatient(CareContactId: Int,
