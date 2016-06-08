@@ -4,6 +4,7 @@ from threading import Thread
 import time
 
 
+# TODO use same library as AMQPublisher perhaps?
 class AMQSubscriber:
 
     ip = Config.get("bus_ip")

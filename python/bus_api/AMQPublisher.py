@@ -1,7 +1,9 @@
-import stomp
+from stompest.config import StompConfig
+from stompest.sync import Stomp
 from config import Config
 
 
+# TODO to make this one asynish with stompest.async? think about it
 class AMQPublisher:
 
     ip = Config.get("bus_ip")
@@ -10,9 +12,10 @@ class AMQPublisher:
     pw = Config.get("bus_pass")
 
     def __init__(self):
-        self.c = stomp.Connection([(self.ip, int(self.port))])
-        self.c.start()
-        self.c.connect(self.user, self.pw, wait=True)
+        stompConfig = StompConfig("tcp://" + self.ip + ":" + self.port,
+                                  login=self.user, passcode=self.pw)
+        self.client = Stomp(stompConfig)
+        self.client.connect()
 
     def publish(self, topic, message):
-        self.c.send(body=message, destination="/topic/" + topic)
+        self.client.send("/topic/" + topic, message)
