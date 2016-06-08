@@ -1,6 +1,6 @@
 from config import Config
 import stomp
-# from threading import Thread
+from threading import Thread
 import time
 
 
@@ -14,13 +14,6 @@ class AMQSubscriber:
     # TODO revise use of thread, it should be useful with multiple
     # subscriptions right?
     def subscribe(self, topic, on_msg):
-        # thread = Thread(target=self._unthreaded_subscribe,
-        #                 args=(topic, on_msg))
-        # thread.daemon = True
-        # thread.start()
-        self._unthreaded_subscribe(topic, on_msg)
-
-    def _unthreaded_subscribe(self, topic, on_msg):
         self.on_msg = on_msg
         c = stomp.Connection([(self.ip, int(self.port))])
         listener = self._Listener()
@@ -29,6 +22,11 @@ class AMQSubscriber:
         c.start()
         c.connect(self.user, self.pw, wait=True)
         c.subscribe(destination="/topic/" + topic, id=1, ack='auto')
+        time.sleep(0.01)  # TODO fix this properly
+        thread = Thread(target=self._keepalive)
+        thread.start()
+
+    def _keepalive(self):
         while True:
             time.sleep(1)
 
