@@ -6,7 +6,7 @@ import erica.services.common._
 import org.joda.time.DateTime
 import org.json4s._
 import org.json4s.native.JsonMethods._
-
+import org.json4s.native.Serialization._
 /**
   * Created by marp on 2016-06-06.
   */
@@ -20,7 +20,7 @@ class Interpreter {
   val amqSubscriber = new AMQSubscriber
   val amqPublisher = new AMQPublisher
 
-  amqSubscriber.subscribe("hej", (mess:String) =>
+  amqSubscriber.subscribe("elvisDiff", (mess:String) =>
     received(mess))
 
   def received(mess:String): Unit = {
@@ -41,7 +41,6 @@ class Interpreter {
   }
 
   def newReceived(mess:JValue): List[EricaEvent] = {
-    println(mess.extract[NewPatient])
     val patient = mess.extract[NewPatient].patient
     val timestamp = patient.CareContactRegistrationTime
     val id = patient.PatientId
@@ -158,15 +157,14 @@ class Interpreter {
     }
   }
 
-  /**
-    * Converts a DateTime to the more agreeable epoch format
-    */
   def getEpoch(timestamp:DateTime): BigInt = {
     timestamp.getMillis
   }
 
   def publishEvents(events: List[EricaEvent]): Unit = {
-    println("\npublishing events...")
-    events.foreach( e => println(e))
+    println("publishing events...")
+    events.foreach( e => {
+      amqPublisher.publish("erica_event", write(e))
+    })
   }
 }
