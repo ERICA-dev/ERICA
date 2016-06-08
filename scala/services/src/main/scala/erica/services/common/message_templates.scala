@@ -8,12 +8,13 @@ import org.json4s._
   * Created by marp on 2016-06-07.
   */
 
-case class EricaEvent(  Title:      String,
+case class EricaEvent(  Type:       String,
+                        Title:      String,
                         Value:      String,
                         Category:   String,
-                        Start:      Long,
-                        End:        Long,
-                        SubjectId:  Long
+                        Start:      BigInt,
+                        End:        BigInt,
+                        SubjectId:  BigInt
                      )
 
 case class ElvisPatient(CareContactId: Int,
