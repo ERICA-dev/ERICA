@@ -47,12 +47,16 @@ class Interpreter {
     val patient = mess.extract[NewPatient].patient
 
     // create "registered" event
-    val registered = EricaEvent(Title = "registered",
-                                Timestamp = getEpoch(patient.CareContactRegistrationTime),
-                                SubjectId = patient.PatientId,
-                                Data = Map("asd" -> JInt(2))
-                              )
+    val registered = EricaEvent(
+      Title = "registered",
+      Value = patient.CareContactId.toString,
+      Category = "registered",
+      Start = getEpoch(patient.CareContactRegistrationTime),
+      End =  getEpoch(patient.CareContactRegistrationTime),
+      SubjectId = patient.PatientId
+    )
 
+    val events = elvisEventTranslator(patient.Events)
     // create one event for each elvis field
 
     // create one event for each elvisEvent
@@ -72,9 +76,28 @@ class Interpreter {
     // only create the "removed" event
   }
 
-  def elvisEventTranslator(events:List[ElvisEvent]): List[EricaEvent] ={
-    null
+  def elvisEventTranslator(events:List[ElvisEvent]): List[EricaEvent] = {
+    events.head.Category match {
+      case "P" => elvisPriorityEventToErica(events.head) :: elvisEventTranslator(events.tail)
+      case _ =>   elvisEventToErica(events.head)         :: elvisEventTranslator(events.tail)
+    }
   }
+
+  def elvisEventToErica(event:ElvisEvent): EricaEvent = {
+    EricaEvent(
+      Title = event.Title,
+      Value = event.Value,
+      Category = event.Category,
+      Start = getEpoch(event.Start),
+      End =  getEpoch(event.End),
+      SubjectId = event.CareEventId
+    )
+  }
+
+  def elvisPriorityEventToErica(event:ElvisEvent): EricaEvent = {
+    
+  }
+
 
   /**
     * Converts a DateTime to the more agreeable epoch format
