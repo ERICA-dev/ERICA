@@ -33,7 +33,7 @@ lazy val dependencies = Seq(
 
 
 lazy val root = project.in( file(".") )
-  .aggregate(bus_api, config, services)
+  .aggregate(bus_api, config, services, prediction_diff_producer)
 
 lazy val config = (project in file("config")).
   settings(commonSettings: _*).
@@ -49,6 +49,10 @@ lazy val services = (project in file("services")).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 
+lazy val prediction_diff_producer = (project in file("prediction_diff_producer")).
+  dependsOn(bus_api).
+  settings(commonSettings: _*).
+  settings(libraryDependencies ++= dependencies)
 
 
 
