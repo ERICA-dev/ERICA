@@ -1,17 +1,25 @@
 from AMQSubscriber import AMQSubscriber
 from AMQPublisher import AMQPublisher
-# import time
-
-amqPublisher = AMQPublisher()
-amqSubscriber = AMQSubscriber()
+import unittest
+import time
 
 
-def myFunc(message):
-    print message
-    amqPublisher.publish("testTopik", "awmagadlooopz")
+class TestStringFromPublisherToSubscriber(unittest.TestCase):
 
-amqSubscriber.subscribe("testTopik", myFunc)
+    returnedstr = ""
 
-# this recursion starter won't work cause of thread issue
-# example can still be evoked manually from AMQ-frontend...
-amqPublisher.publish("testTopik", "fiire")
+    # test names must begin with test
+    def test_msg(self):
+        sentstr = "haaerafsojwfh"
+        amqPublisher = AMQPublisher()
+        amqSubscriber = AMQSubscriber()
+
+        def on_msg(mess):
+            self.returnedstr = mess
+        amqSubscriber.subscribe("testTopik", on_msg)
+        amqPublisher.publish("testTopik", sentstr)
+        time.sleep(0.01)
+        self.assertEqual(self.returnedstr, sentstr)
+
+if __name__ == '__main__':
+    unittest.main()
