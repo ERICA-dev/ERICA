@@ -11,6 +11,7 @@ object PredictionDiffProducer extends App {
   val amqPublisher = new AMQPublisher
 
   amqSubscriber.subscribe("EricaEvents", (mess: String) => {
-      println(mess)
+    val json: JValue = parse(mess)
+    println(mess)
   })
 }
