@@ -44,8 +44,8 @@ class TestQueueIncrement(unittest.TestCase):
     returnedstr = ""
 
     def test_queue_increment(self):
-        erica_event = "{'Title': 'arrival', 'Value': 'albatross', 'Category': 'banan', 'Start': 1337, 'End': 1337, 'SubjectId': 1337}"
-        supposedreturn = "{'Queue': 'increment'}"
+        erica_event = '{"Title": "Arrival", "Value": "albatross", "Category": "banan", "Start": 1337, "End": 1337, "SubjectId": 1337}'
+        supposedreturn = '{"Queue": "Increment"}'
 
         amqPublisher = AMQPublisher()
         amqSubscriber = AMQSubscriber()
@@ -53,8 +53,8 @@ class TestQueueIncrement(unittest.TestCase):
         def on_msg(mess):
             self.returnedstr = mess
         amqSubscriber.subscribe("PredictionFeatures", on_msg)
-        time.sleep(0.05)
         amqPublisher.publish("EricaEvents", erica_event)
+        time.sleep(0.05)
         self.assertEqual(self.returnedstr, supposedreturn)
 
 
