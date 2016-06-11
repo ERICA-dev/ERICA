@@ -1,6 +1,6 @@
-package bus_recorder
+package bus_replayer
 
-object HistoryMain extends App {
+object RecorderMain extends App {
   //new Recorder("elvisDiff")
   new Recorder("erica_event")
 }
