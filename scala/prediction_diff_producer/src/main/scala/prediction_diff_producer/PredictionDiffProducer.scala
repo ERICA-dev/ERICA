@@ -1,7 +1,6 @@
-package erica.services
+package prediction_diff_producer
 
-import erica.bus_api.AMQSubscriber
-import erica.bus_api.AMQPublisher
+import bus_api.{AMQPublisher, AMQSubscriber}
 import org.json4s._
 import org.json4s.native.JsonMethods._
 

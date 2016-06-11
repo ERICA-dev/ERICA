@@ -1,12 +1,11 @@
-package erica.services.diff_interpreter
+package diff_interpreter
 
-import erica.bus_api.AMQSubscriber
-import erica.bus_api.AMQPublisher
-import erica.services.common._
+import bus_api._
 import org.joda.time.DateTime
 import org.json4s._
 import org.json4s.native.JsonMethods._
 import org.json4s.native.Serialization._
+
 /**
   * Created by marp on 2016-06-06.
   */

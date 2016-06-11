@@ -1,10 +1,10 @@
-package erica.bus_api
+package bus_api
 
-import akka.actor.{Props, Actor, ActorRef, ActorSystem}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import com.codemettle.reactivemq.ReActiveMQExtension
 import com.codemettle.reactivemq.ReActiveMQMessages._
-import com.codemettle.reactivemq.model.{Topic, AMQMessage}
-import erica.config.Config
+import com.codemettle.reactivemq.model.AMQMessage
+import config.Config
 
 case object Connect
 

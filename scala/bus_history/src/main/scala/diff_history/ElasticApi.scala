@@ -1,6 +1,7 @@
-package erica.services.diff_history
+package diff_history
 
-import erica.services.common.{ElasticError, ElasticQuery}
+import bus_api.{ElasticError, ElasticQuery}
+import config.Config
 import org.json4s._
 import org.json4s.native.JsonMethods._
 import wabisabi.Client
@@ -8,7 +9,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
 // Client.get gets sad without this
-import erica.config.Config
 
 object ElasticApi {
   implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all

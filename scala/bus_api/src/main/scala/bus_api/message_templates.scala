@@ -1,8 +1,7 @@
-package erica.services.common
+package bus_api
 
 import com.github.nscala_time.time.Imports._
 import org.json4s.JsonAST.JValue
-import org.json4s._
 
 /**
   * Created by marp on 2016-06-07.
@@ -82,7 +81,7 @@ case class Error (
 )
 
 case class SavedMessage (
-                        timestamp: BigInt,
-                        data:JValue
-                        )
+  timestamp: BigInt,
+  data:JValue
+)
 

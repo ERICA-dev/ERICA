@@ -1,5 +1,5 @@
+import config.Config
 import org.scalatest.FlatSpec
-import erica.config.Config
 
 class ASpec extends FlatSpec {
   "Configs bus_ip" should "be a string" in {

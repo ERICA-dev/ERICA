@@ -1,18 +1,14 @@
-package erica.services.diff_history
+package diff_history
 
 import java.util.concurrent.atomic.AtomicLong
-
-import erica.bus_api.AMQSubscriber
-import erica.services.common.{SavedMessage, ElasticError, ElasticQuery}
+import bus_api.{SavedMessage, ElasticError, ElasticQuery, AMQSubscriber}
 import org.json4s.native.Serialization.write
 import org.json4s._
 import org.json4s.native.JsonMethods._
-import wabisabi.Client
+
 /**
   * Created by marp on 2016-06-11.
   */
-
-
 
 class Recorder(topic: String) {
   println("fetching current sequence number...")

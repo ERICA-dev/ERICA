@@ -1,8 +1,8 @@
-package erica.services.diff_history
+package diff_history
 
 import java.util.concurrent.atomic.AtomicLong
 
-import erica.services.common.ElasticQuery
+import bus_api.ElasticQuery
 
 object RecorderMain extends App {
   //new Recorder("elvisDiff")
