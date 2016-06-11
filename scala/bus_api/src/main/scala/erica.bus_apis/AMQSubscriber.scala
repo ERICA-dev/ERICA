@@ -40,7 +40,7 @@ private class SubscribeActor(consumedTopic: String, onMSG: (String) => Unit) ext
       println("failed:" + reason)
     }
     case mess @ AMQMessage(body, prop, headers) => {
-      println(body)
+      //println(body)
       onMSG(body.toString)
     }
   }
