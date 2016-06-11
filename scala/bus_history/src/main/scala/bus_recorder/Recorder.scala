@@ -1,7 +1,8 @@
-package diff_history
+package bus_recorder
 
+import elastic_api._
 import java.util.concurrent.atomic.AtomicLong
-import bus_api.{SavedMessage, ElasticError, ElasticQuery, AMQSubscriber}
+import bus_api.AMQSubscriber
 import org.json4s.native.Serialization.write
 import org.json4s._
 import org.json4s.native.JsonMethods._

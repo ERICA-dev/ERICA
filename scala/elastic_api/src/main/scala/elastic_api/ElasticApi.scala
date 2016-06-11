@@ -1,10 +1,10 @@
-package diff_history
+package elastic_api
 
-import bus_api.{ElasticError, ElasticQuery}
 import config.Config
 import org.json4s._
 import org.json4s.native.JsonMethods._
 import wabisabi.Client
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
