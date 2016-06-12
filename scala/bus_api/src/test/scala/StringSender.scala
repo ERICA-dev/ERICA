@@ -1,6 +1,5 @@
 import bus_api.{AMQSubscriber, AMQPublisher}
 import org.scalatest.FlatSpec
-import erica.bus_api.AMQSubscriber
 
 class StringSender extends FlatSpec {
   "A sent string" should "come back the same" in {

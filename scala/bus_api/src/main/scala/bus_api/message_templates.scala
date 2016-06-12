@@ -44,3 +44,9 @@ case class ElvisEvent(
 case class PatientDiff(updates: Map[String, JValue], newEvents: List[ElvisEvent], removedEvents: List[ElvisEvent])
 case class RemovedPatient(timestamp: DateTime, patient: ElvisPatient)
 case class NewPatient(timestamp: DateTime, patient: ElvisPatient)
+
+case class ReplayRequest (
+  Topic: String,
+  LookBackTime: BigInt,
+  ResponseTopic: String
+)

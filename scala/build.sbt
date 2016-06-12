@@ -40,6 +40,11 @@ lazy val config = (project in file("config")).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 
+lazy val json_handling = (project in file("json_handling")).
+  dependsOn(config).
+  settings(commonSettings: _*).
+  settings(libraryDependencies ++= dependencies)
+
 lazy val elastic_api = (project in file("elastic_api")).
   dependsOn(config).
   settings(commonSettings: _*).
@@ -59,7 +64,6 @@ lazy val bus_replayer = (project in file("bus_replayer")).
   dependsOn(config, bus_api, prediction_diff_producer, elastic_api).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
-
 
 lazy val bus_api = (project in file("bus_api")).
   dependsOn(config).
