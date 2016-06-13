@@ -18,7 +18,7 @@ class TestStringFromPublisherToSubscriber(unittest.TestCase):
             self.returnedstr = mess
         amqSubscriber.subscribe("testTopik", on_msg)
         amqPublisher.publish("testTopik", sentstr)
-        time.sleep(0.05)
+        time.sleep(0.1)
         self.assertEqual(self.returnedstr, sentstr)
 
 
@@ -35,7 +35,7 @@ class TestJSONInJSONOut(unittest.TestCase):
             self.returnedjson = mess
         amqSubscriber.subscribe("testTopik", on_msg)
         amqPublisher.publish("testTopik", sentjson)
-        time.sleep(0.05)
+        time.sleep(0.1)
         self.assertEqual(self.returnedjson, sentjson)
 
 
@@ -44,8 +44,15 @@ class TestQueueIncrement(unittest.TestCase):
     returnedstr = ""
 
     def test_queue_increment(self):
-        erica_event = '{"Title": "Arrival", "Value": "albatross", "Category": "banan", "Start": 1337, "End": 1337, "SubjectId": 1337}'
-        supposedreturn = '{"Queue": "Increment"}'
+        # erica_event = '{"Title": "Arrival", "Value": "albatross", "Category": "banan", "Start": 1337, "End": 1337, "SubjectId": 1337}'
+        erica_event = '{"Type": "Arrival",\
+                        "Title": "mayo je",\
+                        "Value": "albatross",\
+                        "Category": "mu",\
+                        "Start": "today",\
+                        "End": "alsoToday",\
+                        "SubjectId": "whoKnows"}'
+        supposedreturn = '{"Feature":"Queue","Change":"+"}'
 
         amqPublisher = AMQPublisher()
         amqSubscriber = AMQSubscriber()
@@ -53,8 +60,9 @@ class TestQueueIncrement(unittest.TestCase):
         def on_msg(mess):
             self.returnedstr = mess
         amqSubscriber.subscribe("PredictionFeatures", on_msg)
+        # time.sleep(0.1)
         amqPublisher.publish("EricaEvents", erica_event)
-        time.sleep(0.05)
+        time.sleep(0.1)
         self.assertEqual(self.returnedstr, supposedreturn)
 
 

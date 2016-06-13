@@ -1,24 +1,59 @@
 package prediction_diff_producer
 
 import bus_api.{AMQPublisher, AMQSubscriber}
-import org.json4s._
-import org.json4s.native.JsonMethods._
+import json_handling.json_handler._
+
+case class EricaEvent (
+  Type: String,
+  Title: String,
+  Value: String,
+  Category: String,
+  Start: String,
+  End: String,
+  SubjectId: String
+)
+
+case class PredictionFeature (
+  Feature: String,
+  Change: String
+)
+
 
 object PredictionDiffProducer extends App {
-  implicit val formats = org.json4s.DefaultFormats ++ org.json4s.ext.JodaTimeSerializers.all // json4s needs this for something
 
   val amqSubscriber = new AMQSubscriber
   val amqPublisher = new AMQPublisher
 
-  val QUEUE_INCREMENT = "{\"Queue\": \"Increment\"}"
+  private def publish(feature: PredictionFeature): Unit = {
+    amqPublisher.publish("PredictionFeatures", toJsonString(feature))
+  }
+  private def plusFeature(name: String): PredictionFeature = {
+    PredictionFeature(Feature = name, Change = "+")
+  }
+  private def minusFeature(name: String): PredictionFeature = {
+    PredictionFeature(Feature = name, Change = "-")
+  }
+  private def plus(name: String): Unit = {
+    publish(plusFeature(name))
+  }
+  private def minus(name: String): Unit = {
+    publish(minusFeature(name))
+  }
+
 
   amqSubscriber.subscribe("EricaEvents", (mess: String) => {
-    val json: JValue = parse(mess)
-    val messageTitle = json \ "Title"
-    println(messageTitle)
 
-    messageTitle match {
-      case JString("Arrival") => amqPublisher.publish("PredictionFeatures", QUEUE_INCREMENT)
+    val ericaEvent = toCaseClass[EricaEvent](mess)
+
+    ericaEvent.Type match {
+      case "Arrival" => {
+        // publish(plusFeature("Queue")); publish(plusFeature("Untriaged"))
+        plus("Queue"); plus("Untriaged")
+      }
+      case "Triage" => {
+        // publish(minusFeature("Queue")); publish(minusFeature("Untriaged"))
+        minus("Queue"); minus("Untriaged")
+      }
       case _ => throw new IllegalArgumentException
     }
   })

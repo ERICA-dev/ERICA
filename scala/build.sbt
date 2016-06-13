@@ -51,7 +51,7 @@ lazy val elastic_api = (project in file("elastic_api")).
   settings(libraryDependencies ++= dependencies)
 
 lazy val diff_interpreter = (project in file("diff_interpreter")).
-  dependsOn(config, bus_api).
+  dependsOn(config, bus_api, json_handling).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 
@@ -71,7 +71,7 @@ lazy val bus_api = (project in file("bus_api")).
   settings(libraryDependencies ++= dependencies)
 
 lazy val prediction_diff_producer = (project in file("prediction_diff_producer")).
-  dependsOn(bus_api).
+  dependsOn(bus_api, json_handling).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 
