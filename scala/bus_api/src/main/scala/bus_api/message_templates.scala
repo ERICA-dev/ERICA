@@ -47,6 +47,10 @@ case class NewPatient(timestamp: DateTime, patient: ElvisPatient)
 
 case class ReplayRequest (
   Topic: String,
-  LookBackTime: BigInt,
+  FromTime: BigInt,
   ResponseTopic: String
+)
+case class ReplayResponse (
+  Success: Boolean,
+  EventCount: Int
 )

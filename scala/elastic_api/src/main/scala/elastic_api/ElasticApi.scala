@@ -45,23 +45,6 @@ object ElasticApi {
     threadedSearch(index, query, callback)
   }
 
-  //TODO fix this
-  def getPatientFromElastic(index: String, careContactId: String): JValue ={
-    val oldPatientQuery = client.get(index, "PATIENT_TYPE", careContactId).map(_.getResponseBody) //fetch patient from database
-    while (!oldPatientQuery.isCompleted) {} // patiently wait for response from the database. //TODO at some point add timeout. It could get stuck here forever (but probably not). Update: it has not happened for 60 days
-    val oldPatient:JValue = parse(oldPatientQuery.value.get.get) // unpack the string and cast to json-map
-
-    println("Retrieved patient: " +oldPatient \ "_source")
-    oldPatient \ "_source" // The good stuff is located in _source.
-  }
-
-  //TODO fix this
-  def search(index:String, query:String): JValue ={
-    val search = client.search(index, query).map(_.getResponseBody)
-    while(!search.isCompleted){}
-    parse(search.value.get.get) // unpack the string and cast to json-map
-  }
-
   def threadedSearch(index:String, query:String, callback:(Object) => Unit): Unit ={
     val search = client.search(index, query).map(_.getResponseBody)
     search onComplete {

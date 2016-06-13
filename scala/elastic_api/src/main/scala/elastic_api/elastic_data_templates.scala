@@ -21,7 +21,15 @@ case class Shards (
 case class Hits (
   total: BigInt,
   max_score: Double,
-  hits: List[JValue]
+  hits: List[Hit]
+)
+
+case class Hit (
+  _index: String,
+  _type: String,
+  _id: String,
+  _score: Double,
+  _source: JValue
 )
 
 case class ElasticError (
@@ -41,4 +49,8 @@ case class SavedMessage (
   timestamp: BigInt,
   data:JValue
 )
+
+
+
+
 

@@ -15,8 +15,8 @@ object json_handler {
   def toJValue(x:AnyRef): JValue = {
     x match {
       case s:String => parse(s)
-      case c:Object => parse(write(c))
       case j:JValue => j
+      case c:Object => parse(write(c))
       case _ => throw new IllegalArgumentException
     }
   }
@@ -24,8 +24,8 @@ object json_handler {
   def toCaseClass[T](x:AnyRef)()(implicit mf: Manifest[T]):T =  {
     x match {
       case s:String => parse(s).extract[T]
-      case c:T => c.asInstanceOf[T]
       case j:JValue => j.extract[T]
+      case c:T => c.asInstanceOf[T]
       case _ => throw new IllegalArgumentException
     }
   }
@@ -33,8 +33,8 @@ object json_handler {
   def toJsonString(x:AnyRef): String = {
     x match {
       case s:String => s
-      case c:Object => write(c)
       case j:JValue => write(j)
+      case c:Object => write(c)
       case _ => throw new IllegalArgumentException
     }
   }
@@ -43,8 +43,8 @@ object json_handler {
     try {
       y match {
         case s:String => toJsonString(x).equals(y)
-        case c:Object => toCaseClass[y.type](x).equals(y)
         case j:JValue => j.extract[y.type].equals(y)
+        case c:Object => toCaseClass[y.type](x).equals(y)
         case _ => false
       }
     } catch {

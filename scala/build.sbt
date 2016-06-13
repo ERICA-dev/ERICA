@@ -56,12 +56,12 @@ lazy val diff_interpreter = (project in file("diff_interpreter")).
   settings(libraryDependencies ++= dependencies)
 
 lazy val bus_recorder = (project in file("bus_recorder")).
-  dependsOn(config, bus_api, prediction_diff_producer, elastic_api).
+  dependsOn(config, bus_api, prediction_diff_producer, elastic_api, json_handling).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 
 lazy val bus_replayer = (project in file("bus_replayer")).
-  dependsOn(config, bus_api, prediction_diff_producer, elastic_api).
+  dependsOn(config, bus_api, prediction_diff_producer, elastic_api, json_handling).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
 
@@ -74,6 +74,12 @@ lazy val prediction_diff_producer = (project in file("prediction_diff_producer")
   dependsOn(bus_api).
   settings(commonSettings: _*).
   settings(libraryDependencies ++= dependencies)
+
+lazy val bus_monitor = (project in file("bus_monitor")).
+  dependsOn(bus_api).
+  settings(commonSettings: _*).
+  settings(libraryDependencies ++= dependencies)
+
 
 
 
